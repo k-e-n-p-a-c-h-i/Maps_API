@@ -1,16 +1,42 @@
-# This is a sample Python script.
+import sys
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from PyQt5 import uic
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtCore import Qt, QCoreApplication
+from PyQt5.uic.properties import QtCore
+from pip._vendor import requests
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, :0')  # Press Ctrl+F8 to toggle the breakpoint.
+class MyWidget(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi('untitled.ui', self)
+        self.initUI()
+
+    def initUI(self):
+        self.pushButton.clicked.connect(self.update)
 
 
-# Press the green button in the gutter to run the script.
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Escape:
+            QCoreApplication.instance().quit()
+
+    def update(self):
+        map_request = "https://static-maps.yandex.ru/1.x/?ll=134.619222%2C-26.400423&l=map&z=3"
+        response = requests.get(map_request)
+        if not response:
+            print("Ошибка выполнения запроса:")
+            print(map_request)
+            print("Http статус:", response.status_code, "(", response.reason, ")")
+            sys.exit(1)
+        payload = QtCore.QByteArray(response.content)
+        self.pixmap = QPixmap()
+        self.pixmap.loadFromData(payload, "png")
+        self.image.setPixmap(self.pixmap)
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    app = QApplication(sys.argv)
+    ex = MyWidget()
+    ex.show()
+    sys.exit(app.exec())
