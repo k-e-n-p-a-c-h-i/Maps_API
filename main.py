@@ -2,10 +2,11 @@ import sys
 
 from PyQt5 import uic
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel
 from PyQt5.QtCore import Qt, QCoreApplication
-from PyQt5.uic.properties import QtCore
-from pip._vendor import requests
+from IPython.external.qt_for_kernel import QtCore
+
+import requests
 
 
 class MyWidget(QMainWindow):
@@ -30,7 +31,9 @@ class MyWidget(QMainWindow):
             print(map_request)
             print("Http статус:", response.status_code, "(", response.reason, ")")
             sys.exit(1)
+        print('tyt')
         payload = QtCore.QByteArray(response.content)
+        print(type(payload))
         self.pixmap = QPixmap()
         self.pixmap.loadFromData(payload, "png")
         self.image.setPixmap(self.pixmap)
