@@ -2,11 +2,15 @@ import sys
 
 from PyQt5 import uic
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QMessageBox
 from PyQt5.QtCore import Qt, QCoreApplication
 from IPython.external.qt_for_kernel import QtCore
 
 import requests
+
+
+class BadRequest(Exception):
+    pass
 
 
 class MyWidget(QMainWindow):
@@ -24,19 +28,18 @@ class MyWidget(QMainWindow):
             QCoreApplication.instance().quit()
 
     def update(self):
-        map_request = "https://static-maps.yandex.ru/1.x/?ll=134.619222%2C-26.400423&l=map&z=3"
-        response = requests.get(map_request)
-        if not response:
-            print("Ошибка выполнения запроса:")
-            print(map_request)
-            print("Http статус:", response.status_code, "(", response.reason, ")")
-            sys.exit(1)
-        print('tyt')
-        payload = QtCore.QByteArray(response.content)
-        print(type(payload))
-        self.pixmap = QPixmap()
-        self.pixmap.loadFromData(payload, "png")
-        self.image.setPixmap(self.pixmap)
+        try:
+            map_request = f"https://static-maps.yandex.ru/1.x/?ll={self.lineEdit_2.text()},{self.lineEdit.text()}&l=map&z={self.spinBox.value()}"
+            response = requests.get(map_request)
+            if not response:
+                raise BadRequest
+            payload = QtCore.QByteArray(response.content)
+            self.pixmap = QPixmap()
+            self.pixmap.loadFromData(payload, "png")
+            self.image.setPixmap(self.pixmap)
+        except BadRequest:
+            QMessageBox.critical(self, "Ошибка", "Недопустимый формат данных", QMessageBox.Ok)
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

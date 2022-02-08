@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>map</class>
+ <widget class="QMainWindow" name="map">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Maps_API_1</string>
   </property>
   <property name="styleSheet">
    <string notr="true"/>
@@ -183,7 +183,7 @@ font:bold 14px;</string>
      <number>1</number>
     </property>
     <property name="maximum">
-     <number>100</number>
+     <number>17</number>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton">
