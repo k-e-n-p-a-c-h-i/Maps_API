@@ -1,15 +1,15 @@
 import sys
 import requests
 from PyQt5 import uic
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtCore import Qt, QCoreApplication
-from IPython.external.qt_for_kernel import QtCore
 
 
 class MyWidget(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.img = QImage()
         uic.loadUi('untitled.ui', self)
         self.z = 3
         self.pixmap = QPixmap()
@@ -17,6 +17,7 @@ class MyWidget(QMainWindow):
 
     def initUI(self):
         self.pushButton.clicked.connect(self.update)
+        self.setFixedSize(601, 619)
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_PageUp:
@@ -37,16 +38,16 @@ class MyWidget(QMainWindow):
         params = {
             "ll": ",".join([lon, lat]),
             "z": self.z % 18,
-            "l": "map"
+            "l": "sat,skl"
         }
-        response = requests.get(api_server, params=params)
+        response = requests.get(api_server, params=params, stream=True)
+        self.img.loadFromData(response.content)
+        self.image.setPixmap(QPixmap.fromImage(self.img))
+
         if not response:
             print("Ошибка выполнения запроса:")
             print("Http статус:", response.status_code, "(", response.reason, ")")
             sys.exit(1)
-        payload = QtCore.QByteArray(response.content)
-        self.pixmap.loadFromData(payload, "png")
-        self.image.setPixmap(self.pixmap)
 
 
 if __name__ == '__main__':
