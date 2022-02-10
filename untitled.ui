@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>601</width>
+    <width>606</width>
     <height>619</height>
    </rect>
   </property>
@@ -134,9 +134,9 @@ font:bold 14px;</string>
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>540</y>
+      <y>560</y>
       <width>581</width>
-      <height>41</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -150,6 +150,41 @@ font:bold 14px;</string>
     </property>
     <property name="text">
      <string>Обновить</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>530</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgba(242, 232, 201, 180);
+color: rgb(90, 90, 90);
+border-style: outset;
+border-widht:2px;
+border-radius:10px;
+border-color:black;
+font:bold 14px;</string>
+    </property>
+    <property name="text">
+     <string>Слои:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>530</y>
+      <width>481</width>
+      <height>22</height>
+     </rect>
     </property>
    </widget>
   </widget>

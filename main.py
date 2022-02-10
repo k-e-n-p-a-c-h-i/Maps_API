@@ -11,21 +11,25 @@ class MyWidget(QMainWindow):
         super().__init__()
         self.img = QImage()
         uic.loadUi('untitled.ui', self)
-        self.z = 3
+        self.z = 8
+        self.layer = 'map'
         self.pixmap = QPixmap()
         self.initUI()
 
     def initUI(self):
         self.pushButton.clicked.connect(self.update)
+        self.comboBox.addItems(['схема', 'спутник', 'гибрид'])
         self.setFixedSize(601, 619)
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_PageUp:
-            self.z += 1
+            if self.z < 17:
+                self.z += 1
             self.update()
 
         if event.key() == Qt.Key_PageDown:
-            self.z -= 1
+            if self.z > 0:
+                self.z -= 1
             self.update()
 
         if event.key() == Qt.Key_Escape:
@@ -35,10 +39,21 @@ class MyWidget(QMainWindow):
         api_server = "http://static-maps.yandex.ru/1.x/"
         lon = self.line_latitude.text()
         lat = self.line_altitude.text()
+        selected_layer = self.comboBox.currentText()
+
+        if selected_layer == 'схема':
+            self.layer = 'map'
+
+        if selected_layer == 'спутник':
+            self.layer = 'sat'
+
+        if selected_layer == 'гибрид':
+            self.layer = 'sat,skl'
+
         params = {
             "ll": ",".join([lon, lat]),
-            "z": self.z % 18,
-            "l": "sat,skl"
+            "z": self.z,
+            "l": self.layer
         }
         response = requests.get(api_server, params=params, stream=True)
         self.img.loadFromData(response.content)
